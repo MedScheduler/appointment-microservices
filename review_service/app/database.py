@@ -2,13 +2,13 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
 
 # Conectando ao MongoDB
-client = AsyncIOMotorClient("mongodb://localhost:27017/")  # Ajuste a URI se necessário
+client = AsyncIOMotorClient("mongodb://mongo:27017/")  # Conectando ao MongoDB
 
 # Escolhendo o banco de dados
-db = client["MedScheduler"]  # Substitua pelo nome do seu banco
+db = client["review_db"]  # Banco de dados para reviews
 
-# Escolhendo uma coleção
-collection = db["reviews_service"]  # Substitua pelo nome da sua coleção
+# Escolhendo a coleção
+collection = db["reviews_service"]  # Coleção para reviews
 
 # Função assíncrona para inserir um documento
 async def insert_review(review_data):

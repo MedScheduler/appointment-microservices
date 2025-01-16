@@ -1,0 +1,82 @@
+services:
+  appointments_service:
+    build:
+      context: ./appointments_service
+    ports:
+      - "8000:8000"  # Porta mapeada para o appointments_service
+    volumes:
+      - ./appointments_service/app:/usr/src/app/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/appointments_db  # Configuração de conexão com o MongoDB
+    networks:
+      - app_network
+
+  review_service:
+    build:
+      context: ./review_service
+    ports:
+      - "8003:8003"  # Porta mapeada para o review_service
+    volumes:
+      - ./review_service/app:/usr/src/app/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8003
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/review_db  # Conexão com o MongoDB para o serviço de avaliações
+    networks:
+      - app_network
+
+  availability_service:
+    build:
+      context: ./availability_service
+    ports:
+      - "8004:8004"  # Porta mapeada para o availability_service
+    volumes:
+      - ./availability_service/app:/usr/src/app/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8004
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/availability_db  # Conexão com o MongoDB para o serviço de disponibilidade
+    networks:
+      - app_network
+
+  report_service:
+    build:
+      context: ./report_service
+    ports:
+      - "8005:8005"  # Porta mapeada para o report_service
+    volumes:
+      - ./report_service/app:/usr/src/app/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8005
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/report_db  # Conexão com o MongoDB para o serviço de relatórios
+    networks:
+      - app_network
+
+  mongo:
+    image: "mongo:latest"  # Usando a imagem oficial do MongoDB
+    container_name: mongo
+    ports:
+      - "27017:27017"  # Mapeia a porta padrão do MongoDB
+    volumes:
+      - mongo-data:/data/db  # Persistência dos dados do MongoDB
+    environment:  # Remova as credenciais de autenticação
+      - MONGO_INITDB_ROOT_USERNAME=
+      - MONGO_INITDB_ROOT_PASSWORD=
+    restart: always  # Reinicia o MongoDB automaticamente em caso de falha
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge  # Rede para comunicação entre os serviços
+
+volumes:
+  mongo-data:  # Volume para persistir os dados do MongoDB
+    driver: local
