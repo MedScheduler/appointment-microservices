@@ -1,10 +1,15 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
 
-# Conexão ao MongoDB
-client = AsyncIOMotorClient("mongodb://localhost:27017/")
-db = client["MedScheduler"]  # Banco de dados para o agendamento
-collection = db["appointments_service"]  # Nome da coleção
+# Conectando ao MongoDB
+client = AsyncIOMotorClient("mongodb://mongo:27017/")  # Conectando ao MongoDB
+
+# Escolhendo o banco de dados
+db = client["appointments_db"]  # Banco de dados para agendamento
+
+# Escolhendo a coleção
+collection = db["appointments_service"]  # Coleção para o agendamento
+
 
 # Função assíncrona para inserir um agendamento
 async def insert_appointment(appointment_data):
