@@ -62,7 +62,7 @@ export class UserRepository {
 
   async getUserById(id: number): Promise<User> {
     const foundUser = await db('users')
-      .select(['users.id', 'name', 'email', 'password', 'roles.description'])
+      .select(['users.id', 'name', 'email', 'password', 'roles.description', 'role_id'])
       .where({ 'users.id': id })
       .innerJoin('roles', 'users.role_id', '=', 'roles.id')
       .first();
