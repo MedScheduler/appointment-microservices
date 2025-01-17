@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 from app.models import Availability
-from app.database import insert_availability, get_availabilities, get_availability_by_id, delete_availability, update_availability_in_db
+from app.database import insert_availability, get_availabilities, get_availability_by_id, delete_availability, update_availability_in_db, get_availabilities_by_doctor_id
 from bson import ObjectId
 
 router = APIRouter()
@@ -25,6 +25,13 @@ async def get_availability(availability_id: str):
         raise HTTPException(status_code=404, detail="Availability not found")
     availability["_id"] = str(availability["_id"])
     return availability
+
+@router.get("/availability/doctor/{doctor_id}")
+async def get_availability(doctor_id: str):
+    availabilities = await get_availabilities_by_doctor_id(doctor_id)  # Recuperar todas as disponibilidades
+    for availability in availabilities:
+        availability["_id"] = str(availability["_id"])
+    return availabilities
 
 @router.delete("/availability/{availability_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_availability_route(availability_id: str):

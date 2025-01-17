@@ -90,6 +90,16 @@ export class UserService {
     }
   }
 
+  async getUserByEmail(email: string) {
+    try {
+      return {
+        data: await this.userRepository.getUserByEmail(email),
+      };
+    } catch {
+      return { error: 'Cannot get user' };
+    }
+  }
+
   isUserDuplicated(email: string, role: Role) {
     return this.userRepository.getDuplicatedUser(email, role);
   }

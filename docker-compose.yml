@@ -59,6 +59,21 @@ services:
     networks:
       - app_network
 
+  user_service:
+    build:
+      context: ./users_service
+    ports:
+      - "8006:8006"  # Porta mapeada para o user_service
+    volumes:
+      - ./users_service/src:/app/src
+    command: pnpm start:dev
+    depends_on:
+      - mysql
+    environment:
+      - PORT=8006
+    networks:
+      - app_network
+
   mongo:
     image: "mongo:latest"  # Usando a imagem oficial do MongoDB
     container_name: mongo
@@ -73,10 +88,27 @@ services:
     networks:
       - app_network
 
+  mysql:
+    image: mysql/mysql-server:latest
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-volume:/var/lib/mysql
+    networks:
+     - app_network
+
 networks:
   app_network:
-    driver: bridge  # Rede para comunicação entre os serviços
 
 volumes:
   mongo-data:  # Volume para persistir os dados do MongoDB
+    driver: local
+  mysql-volume:
     driver: local

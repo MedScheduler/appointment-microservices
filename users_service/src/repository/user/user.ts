@@ -72,6 +72,18 @@ export class UserRepository {
     }
   }
 
+  async getUserByEmail(email: string): Promise<User> {
+    const foundUser = await db('users')
+      .select(['users.id', 'name', 'email', 'password', 'roles.description'])
+      .where({ 'users.email': email })
+      .innerJoin('roles', 'users.role_id', '=', 'roles.id')
+      .first();
+
+    if (foundUser) {
+      return this.formatUser(foundUser);
+    }
+  }
+
   async getDuplicatedUser(email: string, role: Role): Promise<boolean> {
     const foundUser = await db('users')
       .select(['users.id'])
@@ -89,6 +101,14 @@ export class UserRepository {
 
     if (filters.role) {
       query.where({ 'roles.description': filters.role });
+    }
+
+    if (filters.ids?.length > 0) {
+      if (filters.ids.length === 1) {
+        query.where({ 'users.id': filters.ids[0] });
+      } else {
+        query.whereIn('users.id', filters.ids);
+      }
     }
 
     const foundUsers = await query;

@@ -26,6 +26,12 @@ async def get_availability_by_id(availability_id):
     availability = await collection.find_one({"_id": ObjectId(availability_id)})
     return availability
 
+# Função assíncrona para buscar a disponibilidade por ID do médico
+async def get_availabilities_by_doctor_id(doctor_id):
+    availability_cursor = collection.find({"doctor_id": doctor_id})
+    availabilities = await availability_cursor.to_list(length=100)
+    return availabilities
+
 # Função assíncrona para deletar a disponibilidade
 async def delete_availability(availability_id):
     result = await collection.delete_one({"_id": ObjectId(availability_id)})

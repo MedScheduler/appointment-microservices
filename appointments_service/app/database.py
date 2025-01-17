@@ -27,6 +27,12 @@ async def get_appointment_by_id(appointment_id):
     appointment = await collection.find_one({"_id": ObjectId(appointment_id)})
     return appointment
 
+# Função assíncrona para buscar agendamentos pelo ID do usuário
+async def get_appointment_by_user_id(user_id):
+    appointments_cursor = collection.find({"user_id": user_id})
+    appointments = await appointments_cursor.to_list(length=100)
+    return appointments
+
 # Função assíncrona para deletar um agendamento
 async def delete_appointment(appointment_id):
     result = await collection.delete_one({"_id": ObjectId(appointment_id)})

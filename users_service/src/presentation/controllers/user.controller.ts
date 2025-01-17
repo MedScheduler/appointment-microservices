@@ -54,6 +54,11 @@ export class UserController {
     name: 'role',
     required: false,
   })
+  @ApiQuery({
+    name: 'ids',
+    required: false,
+    type: [Number],
+  })
   getUsers(@Query() filters: GetUsersFilters) {
     return this.userService.getUsers(filters);
   }

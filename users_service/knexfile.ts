@@ -1,11 +1,10 @@
 import type { Knex } from 'knex';
 
-// Update with your config settings.
-
 const config: { [key: string]: Knex.Config } = {
   development: {
     client: 'mysql2',
     connection: {
+      host: 'mysql',
       database: 'db',
       user: 'user',
       password: 'password',
@@ -16,11 +15,13 @@ const config: { [key: string]: Knex.Config } = {
     },
     migrations: {
       tableName: 'knex_migrations',
+      directory: './migrations',
     },
   },
   staging: {
     client: 'mysql2',
     connection: {
+      host: 'mysql',
       database: 'db',
       user: 'user',
       password: 'password',
@@ -31,11 +32,13 @@ const config: { [key: string]: Knex.Config } = {
     },
     migrations: {
       tableName: 'knex_migrations',
+      directory: './migrations',
     },
   },
   production: {
     client: 'mysql2',
     connection: {
+      host: 'mysql',
       database: 'db',
       user: 'user',
       password: 'password',
@@ -46,6 +49,7 @@ const config: { [key: string]: Knex.Config } = {
     },
     migrations: {
       tableName: 'knex_migrations',
+      directory: './migrations',
     },
   },
 };

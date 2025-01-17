@@ -16,4 +16,5 @@ export type UpdateUserParams = {
 
 export type GetUsersFilters = {
   role: 'doctor' | 'patient' | 'admin';
+  ids?: number[];
 };
