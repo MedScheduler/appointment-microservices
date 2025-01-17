@@ -21,6 +21,12 @@ async def get_reviews():
     reviews = await reviews_cursor.to_list(length=100)
     return reviews
 
+# Função assíncrona para buscar todos os documentos
+async def get_reviews_by_appointment_id_list(id_list):
+    reviews_cursor = collection.find({"appointment_id": {"$in": id_list}}, {"rating": 1, "comment": 1, "appointment_id": 1})
+    reviews = await reviews_cursor.to_list(length=100)
+    return reviews
+
 # Função assíncrona para buscar um documento pelo ID
 async def get_review_by_id(review_id):
     review = await collection.find_one({"_id": ObjectId(review_id)})

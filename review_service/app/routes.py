@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 from app.models import Review
-from app.database import insert_review, get_reviews, get_review_by_id, delete_review, update_review_in_db
-from bson import ObjectId
+from app.database import insert_review, get_reviews, get_review_by_id, delete_review, update_review_in_db, get_reviews_by_appointment_id_list
 
 router = APIRouter()
 
@@ -25,6 +24,14 @@ async def get_review(review_id: str):
         raise HTTPException(status_code=404, detail="Review not found")
     review["_id"] = str(review["_id"])
     return review
+
+@router.get("/reviews/apointment-ids/{id_list}")
+async def get_reviews_by_ids_route(id_list: str):
+    id_list = id_list.split(",")
+    reviews = await get_reviews_by_appointment_id_list(id_list)
+    for review in reviews:
+        review["_id"] = str(review["_id"])
+    return reviews
 
 @router.delete("/reviews/{review_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_review_route(review_id: str):

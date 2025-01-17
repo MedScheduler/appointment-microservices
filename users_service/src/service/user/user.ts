@@ -50,14 +50,18 @@ export class UserService {
 
     const user = await this.getUser(id);
 
+    console.log(user)
+
     if (user.error || !user) {
       return { error: 'User not found' };
     }
-    if (!validateEmail(email)) {
-      return { error: 'Invalid email' };
-    }
-    if (await this.isUserDuplicated(email, user.data.role)) {
-      return { error: 'Email already in use' };
+    if (email) {
+      if (!validateEmail(email)) {
+        return { error: 'Invalid email' };
+      }
+      if (await this.isUserDuplicated(email, user.data.role)) {
+        return { error: 'Email already in use' };
+      }
     }
 
     user.data.id = id;
