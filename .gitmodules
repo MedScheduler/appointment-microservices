@@ -1,3 +1,6 @@
 [submodule "users_service"]
 	path = users_service
 	url = https://github.com/MedScheduler/users_service
+[submodule "appointments_service"]
+	path = appointments_service
+	url = https://github.com/MedScheduler/appointments_service
