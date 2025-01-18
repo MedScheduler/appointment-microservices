@@ -4,3 +4,15 @@
 [submodule "appointments_service"]
 	path = appointments_service
 	url = https://github.com/MedScheduler/appointments_service
+[submodule "availability_service"]
+	path = availability_service
+	url = https://github.com/MedScheduler/availability_service
+[submodule "front-end"]
+	path = front-end
+	url = https://github.com/MedScheduler/front-end
+[submodule "report_service"]
+	path = report_service
+	url = https://github.com/MedScheduler/report_service
+[submodule "review_service"]
+	path = review_service
+	url = https://github.com/MedScheduler/review_service
