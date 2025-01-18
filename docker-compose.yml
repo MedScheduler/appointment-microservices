@@ -9,8 +9,11 @@ services:
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
     depends_on:
       - mongo
+      - kafka
     environment:
       - MONGO_URI=mongodb://mongo:27017/appointments_db  # Configuração de conexão com o MongoDB
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_TOPIC_APPOINTMENTS=appointments
     networks:
       - app_network
 
@@ -36,11 +39,15 @@ services:
       - "8004:8004"  # Porta mapeada para o availability_service
     volumes:
       - ./availability_service/app:/usr/src/app/app
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8004
+    command: sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8004 & sleep 10 && python app/kafka/consumer.py"
     depends_on:
       - mongo
+      - kafka
     environment:
       - MONGO_URI=mongodb://mongo:27017/availability_db  # Conexão com o MongoDB para o serviço de disponibilidade
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_TOPIC_APPOINTMENTS=appointments
+      - PYTHONPATH=/usr/src/app
     networks:
       - app_network
 
