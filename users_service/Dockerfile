@@ -5,9 +5,10 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN corepack enable
-
 RUN pnpm install
 
 COPY . .
 
-CMD [ "pnpm", "run", "start:dev" ]
+RUN pnpm run build
+
+CMD [ "node", "dist/src/main.js" ]
