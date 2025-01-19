@@ -81,6 +81,24 @@ services:
     networks:
       - app_network
 
+  frontend:
+    build:
+      context: ./front-end
+    ports:
+      - "3000:3000"  # Porta mapeada para o frontend
+    volumes:
+      - ./front-end/:/app/src
+    command: "node server.js"
+    environment:
+      - PORT=3000
+      - APPOINTMENTS_SERVICE_URL=appointments_service:8000
+      - REVIEW_SERVICE_URL=review_service:8003
+      - AVAILABILITY_SERVICE_URL=availability_service:8004
+      - REPORT_SERVICE_URL=report_service:8005
+      - USER_SERVICE_URL=user_service:8006
+    networks:
+      - app_network
+
   mongo:
     image: "mongo:latest"  # Usando a imagem oficial do MongoDB
     container_name: mongo
